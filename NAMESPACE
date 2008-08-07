@@ -1,0 +1,5 @@
+useDynLib(mco)
+
+export(nsga2)
+
+S3method(plot, nsga2)
