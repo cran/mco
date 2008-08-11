@@ -22,6 +22,16 @@ nsga2 <- function(fn, idim, odim, ...,
   ## Make sure popsize is a multiple of 4
   if (popsize %% 4 != 0)
     stop("Population size must be a multiple of 4")
+
+  ## Lag generations:
+  ## C source expects each element of generations to be the number of
+  ## generations to go forward before saving the next result set. This is
+  ## unintuitive to specify, so we compute the lagged differences here.
+  if (length(generations) > 1)
+    generations <- c(generations[1], diff(generations))
+
+  if (!all(generations > 0))
+    stop("Cannot go back in time! Your generations argument must be sorted!")
   
   ## Set cdim = 0 if no cfn was given:
   if (is.null(constraints)) cdim <- 0
@@ -35,8 +45,17 @@ nsga2 <- function(fn, idim, odim, ...,
                as.integer(popsize), as.integer(generations),
                cprob, as.integer(cdist),
                mprob, as.integer(mdist))
-  names(res) <- c("par", "value", "pareto.optimal")
-  class(res) <- c("nsga2", "mco")
+  if (1 == length(res)) {
+    res <- res[[1]]
+    names(res) <- c("par", "value", "pareto.optimal")
+    class(res) <- c("nsga2", "mco")
+  } else {
+    for (i in 1:length(res)) {
+      names(res[[i]]) <- c("par", "value", "pareto.optimal")
+      class(res[[i]]) <- c("nsga2", "mco")
+    }
+    class(res) <- "nsga2.collection"
+  }
   return (res)
 }
 
@@ -61,3 +80,16 @@ plot.nsga2 <- function(x, ...) {
     pairs(v, col=col, pch=pch, ...)
   }
 }
+
+plot.nsga2.collection <- function(x, ...) {
+  oask <- devAskNewPage(TRUE)
+  on.exit(devAskNewPage(oask))
+  sapply(x, plot)
+  return;
+}
+
+paretoSet.nsga2 <- function(x, ...)
+  x$par[x$pareto.optimal,]
+
+paretoFront.nsga2 <- function(x, ...)
+  x$value[x$pareto.optimal,]

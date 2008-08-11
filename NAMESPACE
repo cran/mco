@@ -1,5 +1,19 @@
 useDynLib(mco)
 
+## mco.R
+export(paretoSet)
+export(paretoFront)
+
+## nsga2.R:
 export(nsga2)
 
 S3method(plot, nsga2)
+S3method(plot, nsga2.collection)
+S3method(paretoSet, nsga2)
+S3method(paretoFront, nsga2)
+
+## qs.R
+export(normalizeFront)
+export(generationalDistance)
+export(generalizedSpread)
+export(dominatedHypervolume)

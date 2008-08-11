@@ -872,8 +872,10 @@ SEXP do_nsga2(SEXP s_function,
 	      SEXP s_mutation_prob,
 	      SEXP s_mutation_dist) {
   nsga2_ctx ctx;
-  unsigned int i, j;
-  size_t popsize, generations;
+  unsigned int i, j, gen, gc;
+  size_t popsize;
+  int *generations;
+  R_len_t n_generations;
 
   if (!isFunction(s_function))     error("Argument 's_function' is not a function.");
   if (!isFunction(s_constraint))   error("Argument 's_constraint' is not a function.");
@@ -889,23 +891,24 @@ SEXP do_nsga2(SEXP s_function,
   if (!isReal(s_mutation_prob))    error("Argument 's_mutation_prob' is not a real.");
   if (!isInteger(s_mutation_dist)) error("Argument 's_mutation_dist' is not an integer.");
 
-  PROTECT(ctx.function_call   = lang2(s_function, R_NilValue));
-  PROTECT(ctx.constraint_call = lang2(s_constraint, R_NilValue));
-  ctx.objective_dim = INTEGER(s_obj_dim)[0];
-  ctx.constraint_dim = INTEGER(s_constr_dim)[0];;
-  ctx.input_dim = INTEGER(s_input_dim)[0];
-  ctx.lower_input_bound = REAL(s_lower_bound);
-  ctx.upper_input_bound = REAL(s_upper_bound);
-  popsize = INTEGER(s_popsize)[0];
-  generations = INTEGER(s_generations)[0];
+  PROTECT(ctx.function_call	= lang2(s_function, R_NilValue));
+  PROTECT(ctx.constraint_call	= lang2(s_constraint, R_NilValue));
+  ctx.objective_dim		= INTEGER(s_obj_dim)[0];
+  ctx.constraint_dim		= INTEGER(s_constr_dim)[0];;
+  ctx.input_dim			= INTEGER(s_input_dim)[0];
+  ctx.lower_input_bound		= REAL(s_lower_bound);
+  ctx.upper_input_bound		= REAL(s_upper_bound);
+  popsize			= INTEGER(s_popsize)[0];  
+  generations			= INTEGER(s_generations);
+  n_generations                 = length(s_generations);
 
-  ctx.crossing_probability = REAL(s_crossing_prob)[0];
-  ctx.eta_c = INTEGER(s_crossing_dist)[0];
-  ctx.mutation_probability = REAL(s_mutation_prob)[0];
-  ctx.eta_m = INTEGER(s_mutation_dist)[0];
+  ctx.crossing_probability	= REAL(s_crossing_prob)[0];
+  ctx.eta_c			= INTEGER(s_crossing_dist)[0];
+  ctx.mutation_probability	= REAL(s_mutation_prob)[0];
+  ctx.eta_m			= INTEGER(s_mutation_dist)[0];
 
-  ctx.input_mutations = 0;
-  ctx.input_crossings = 0;
+  ctx.input_mutations		= 0;
+  ctx.input_crossings		= 0;
 
   /* 
    * Allocate parent, child and combined populations 
@@ -915,47 +918,55 @@ SEXP do_nsga2(SEXP s_function,
   children = population_alloc(&ctx, popsize);
   combined = population_alloc(&ctx, 2*popsize);
 
+  SEXP s_res;
+  PROTECT(s_res = allocVector(VECSXP, n_generations));
+
   /*
    * Initialize parent population, evaluate it and do inital NDS
    */
   population_initialize(&ctx, parents);
   evaluate_pop (&ctx, parents);
   assign_rank_and_crowding_distance (&ctx, parents);
-  for (i=2; i <= generations; ++i) {    
-    selection (&ctx, parents, children);
-    mutation_pop (&ctx, children);
-    evaluate_pop(&ctx, children);
-    merge (&ctx, parents, children, combined);
-    fill_nondominated_sort (&ctx, combined, parents);
+  for (gen=0; gen < n_generations; ++gen) {
+    for (i=2; (i-2) <= generations[gen]; ++i) {
+      selection (&ctx, parents, children);
+      mutation_pop (&ctx, children);
+      evaluate_pop(&ctx, children);
+      merge (&ctx, parents, children, combined);
+      fill_nondominated_sort (&ctx, combined, parents);
+      
+      R_CheckUserInterrupt(); /* Allow user interuption */
+    }
 
-    R_CheckUserInterrupt(); /* Allow user interuption */
+    /* Copy parent population into SEXPs */
+    SEXP s_input, s_objective, s_pareto_optimal;
+    double *input, *objective;
+    int *pareto_optimal;
+    PROTECT(s_input = allocMatrix(REALSXP, popsize, ctx.input_dim));
+    input = REAL(s_input);
+    PROTECT(s_objective = allocMatrix(REALSXP, popsize, ctx.objective_dim));
+    objective = REAL(s_objective);
+    PROTECT(s_pareto_optimal = allocVector(LGLSXP, popsize));
+    pareto_optimal = LOGICAL(s_pareto_optimal);
+    
+    for (i=0; i < popsize; ++i) {
+      pareto_optimal[i] = on_pareto_front(&(parents->ind[i]));
+      for (j=0; j < ctx.input_dim; ++j)
+	input[popsize * j + i] = parents->ind[i].input[j];
+      for (j=0; j < ctx.objective_dim; ++j)
+	objective[popsize * j + i] = parents->ind[i].objective[j];      
+    }
+    /* Buid result list */
+    SEXP s_pres;
+    PROTECT(s_pres = allocVector(VECSXP, 3));
+    SET_VECTOR_ELT(s_pres, 0, s_input);
+    SET_VECTOR_ELT(s_pres, 1, s_objective);
+    SET_VECTOR_ELT(s_pres, 2, s_pareto_optimal);
+    UNPROTECT(4); /* s_input, s_objective, s_pareto_optimal, s_pres */  
+    
+    /* Save in result list: */
+    SET_VECTOR_ELT(s_res, gen, s_pres);
   }
-  UNPROTECT(2); /* s_function_call, s_constraint_call */
-
-  /* Copy parent population into SEXPs */
-  SEXP s_input, s_objective, s_pareto_optimal;
-  double *input, *objective;
-  int *pareto_optimal;
-  PROTECT(s_input = allocMatrix(REALSXP, popsize, ctx.input_dim));
-  input = REAL(s_input);
-  PROTECT(s_objective = allocMatrix(REALSXP, popsize, ctx.objective_dim));
-  objective = REAL(s_objective);
-  PROTECT(s_pareto_optimal = allocVector(LGLSXP, popsize));
-  pareto_optimal = LOGICAL(s_pareto_optimal);
-
-  for (i=0; i < popsize; ++i) {
-    pareto_optimal[i] = on_pareto_front(&(parents->ind[i]));
-    for (j=0; j < ctx.input_dim; ++j)
-      input[popsize * j + i] = parents->ind[i].input[j];
-    for (j=0; j < ctx.objective_dim; ++j)
-      objective[popsize * j + i] = parents->ind[i].objective[j];      
-  }
-  /* Buid result list */
-  SEXP s_res;
-  PROTECT(s_res = allocVector(VECSXP, 3));
-  SET_VECTOR_ELT(s_res, 0, s_input);
-  SET_VECTOR_ELT(s_res, 1, s_objective);
-  SET_VECTOR_ELT(s_res, 2, s_pareto_optimal);
-  UNPROTECT(4); /* s_input, s_objective, s_pareto_optimal, s_res */  
+  UNPROTECT(3); /* s_function_call, s_constraint_call, s_res */
   return s_res;
 }
