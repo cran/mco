@@ -10,13 +10,12 @@
 \usage{
 generationalDistance(x, o)
 generalizedSpread(x, o)
-dominatedHypervolume(front, ref)
+dominatedHypervolume(x, ref)
 }
 \arguments{
   \item{x}{Estimated pareto front or an object which has a paretoFront method}
   \item{o}{True pareto front or an object which has a paretoFront
     method}
-  \item{front}{Matrix containing the pareto front}
   \item{ref}{Reference point (may be omitted).}
 }
 \details{

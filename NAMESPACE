@@ -2,7 +2,13 @@ useDynLib(mco)
 
 ## mco.R
 export(paretoSet)
+S3method(paretoSet, matrix)
+
 export(paretoFront)
+S3method(paretoFront, matrix)
+
+export(paretoFilter)
+S3method(paretoFilter, matrix)
 
 ## nsga2.R:
 export(nsga2)

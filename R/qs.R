@@ -59,13 +59,6 @@ generalizedSpread <- function(x, o) {
   ## Calculate extreme values:
   nobj <- ncol(front)
   
-##  extreme <- matrix(0, ncol=nobj, nrow=nobj)
-##  for (i in 1:nobj) {
-##    o <- order(ntruefront[,i])
-##    for (j in 1:nobj) {
-##      extreme[i,j] <- ntruefront[o,][N, j]
-##    }
-##  }
   extreme <- sapply(1:nobj, function(i) ntruefront[which.max(ntruefront[,i]),])
 
   ## Lexographically sort front:
@@ -82,10 +75,14 @@ generalizedSpread <- function(x, o) {
   }
 }
 
-dominatedHypervolume <- function(front, ref) {
+dominatedHypervolume <- function(x, ref) {
+  ## Extract pareto front:
+  front <- paretoFront(x)
+  
   ## Possibly infer reference point:
   if (missing(ref))
     ref <- apply(front, 2, max)
+
   ## Sanity checks:
   if (!is.matrix(front))
     stop("Pareto front must be a matrix")
@@ -94,4 +91,11 @@ dominatedHypervolume <- function(front, ref) {
 
   ## Note the transopse. do_hv() needs the front in row major format.
   .Call("do_hv", t(front), ref)
+}
+
+epsilonDistance <- function(x, o) {
+  front <- paretoFront(x)
+  truefront <- paretoFront(o)
+  
+  .Call("do_eps_ind", front, truefront)
 }
