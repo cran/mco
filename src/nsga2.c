@@ -302,7 +302,6 @@ static void evaluate_pop (nsga2_ctx *ctx, population *pop) {
     /* Possibly evaluate constraints */
     pop->ind[i].constraint_violation = 0.0;
     if (ctx->constraint_dim > 0) {
-      SEXP cval;
       PROTECT(s_cval = eval(ccall, ctx->environment));
       REPROTECT(s_cval = coerceVector(s_cval, REALSXP), ip);
       for (j = 0; j < ctx->constraint_dim; ++j) {
@@ -872,7 +871,7 @@ SEXP do_nsga2(SEXP s_function,
 	      SEXP s_mutation_prob,
 	      SEXP s_mutation_dist) {
   nsga2_ctx ctx;
-  unsigned int i, j, gen, gc;
+  unsigned int i, j, gen;
   size_t popsize;
   int *generations;
   R_len_t n_generations;

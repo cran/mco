@@ -21,11 +21,11 @@ normalizeFront <- function(front, minval, maxval) {
 
 ## Squared distance
 distance2 <- function(x, y)
-  (x - y) %*% (x - y)
+  crossprod((x - y))
 
 ## Squared distance to front
 distanceToFront2 <- function(x, front)
-  min(sapply(1:nrow(front), function(i) { z <- (x - front[i,]); z %*% z }))
+  min(sapply(1:nrow(front), function(i) { crossprod(x - front[i,]) }))
 
 generationalDistance <- function(x, o) {
   front <- paretoFront(x)
@@ -59,6 +59,13 @@ generalizedSpread <- function(x, o) {
   ## Calculate extreme values:
   nobj <- ncol(front)
   
+##  extreme <- matrix(0, ncol=nobj, nrow=nobj)
+##  for (i in 1:nobj) {
+##    o <- order(ntruefront[,i])
+##    for (j in 1:nobj) {
+##      extreme[i,j] <- ntruefront[o,][N, j]
+##    }
+##  }
   extreme <- sapply(1:nobj, function(i) ntruefront[which.max(ntruefront[,i]),])
 
   ## Lexographically sort front:
@@ -93,9 +100,17 @@ dominatedHypervolume <- function(x, ref) {
   .Call("do_hv", t(front), ref)
 }
 
-epsilonDistance <- function(x, o) {
-  front <- paretoFront(x)
-  truefront <- paretoFront(o)
+epsilonIndicator <- function(x, o) {
+  x.front <- paretoFront(x)
+  o.front <- paretoFront(o)
+
+  if (!is.matrix(x.front))
+    stop("'x' must be a valid pareto front.")
+  if (!is.matrix(o.front))
+    stop("'o' must be a valid pareto front.")#
+
+  if (any(x.front < 0) || any(o.front < 0))
+    stop("Epsilon Indicator only works for fronts which are strictly positive.")
   
-  .Call("do_eps_ind", front, truefront)
+  .Call("do_eps_ind", x.front, o.front)
 }

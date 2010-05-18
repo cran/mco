@@ -1,0 +1,85 @@
+commit d152ebdb3be97f09931f40cae35cfa3092c5e57d
+Author: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
+Date:   2010-05-18 14:14:09 +0200
+
+    Fix Rd documentation.
+
+commit d7dc665c2e0b5552e00fe532cbbc640db1cd3116
+Author: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
+Date:   2010-05-17 22:13:13 +0200
+
+    Bump version number.
+
+commit 3150422a25acca97c9cc2dac94dd51c0f9779e2f
+Author: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
+Date:   2010-05-17 22:12:34 +0200
+
+    Update hypervolume documentation.
+
+commit 21660255e5201ad96db6a7f1115280e2c2056eb2
+Author: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
+Date:   2010-05-17 22:12:20 +0200
+
+    Remove object files  from git repository.
+
+commit 019186654af9682ab0db8809c71a385a9ecd32c8
+Author: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
+Date:   2010-05-12 08:34:57 +0200
+
+    Bump version number.
+
+commit cb8d2d9f045f534fe07efa0e476cb23ede46e868
+Author: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
+Date:   2010-05-12 08:33:14 +0200
+
+    Fix compiler warnings.
+
+commit e0043f29459c9402c14d16b597cc2ff76dd04ff7
+Author: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
+Date:   2010-05-12 08:32:58 +0200
+
+    Improve nsga2() documentation.
+
+commit aad776ff71605f111b31502bc1e8cecba26c508e
+Author: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
+Date:   2010-05-12 08:32:28 +0200
+
+    Update Fonseca et.al. hypervolume code to version 1.3rc1.
+
+commit e7b6dfc3c751ad0e09d13debecb4ca4ce93a1710
+Author: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
+Date:   2009-10-13 23:39:36 +0200
+
+    Fix check warning from empty details section.
+
+commit d109e6e94259c300e8438c5345114f419a01be96
+Author: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
+Date:   2009-08-16 14:40:07 +0200
+
+    paretoFront.nsga2() should always return a matrix.
+
+commit 891963a12a00ceee4bbc2e2473586766c02e2749
+Author: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
+Date:   2009-08-16 13:16:56 +0200
+
+    * Fix paretoFront() so that it always returns a matrix.
+    
+    * Remove date header from description and bump version number.
+
+commit 368996a741bbcdc6c9060d14a7b5697792efe2ce
+Author: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
+Date:   2009-06-30 18:32:51 +0200
+
+    Cosmetic changes
+
+commit 1c03e69e41096d81feebbe8ff1b822920d0210d7
+Author: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
+Date:   2009-06-30 15:20:11 +0200
+
+    Remove subversion cruft
+
+commit 3a4a24a4f7db5389c3906cdb1e20e707e1fbac6c
+Author: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
+Date:   2009-06-30 15:05:32 +0200
+
+    Inital import from r-forges subversion repository
