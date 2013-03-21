@@ -1,4 +1,4 @@
-/**
+/** -*- c-basic-offset: 2 -*-
  * nsga2.c - C implementation of NSGA-II
  *
  * Portions of this file are taken from the reference implementation
@@ -98,10 +98,8 @@ static void population_initialize(nsga2_ctx *ctx, population *pop) {
 
 static void insert (list *node, int x) {
   list *temp;
-  if (node==NULL) {
-    printf("\n Error!! asked to enter after a NULL pointer, hence exiting \n");
-    exit(1);
-  }
+  if (node == NULL)
+      error("Asked to insert a NULL pointer.");
   temp = (list *)Calloc(1, list);
   temp->index = x;
   temp->child = node->child;
@@ -115,10 +113,8 @@ static void insert (list *node, int x) {
 
 static list* del (list *node) {
   list *temp;
-  if (node==NULL) {
-    printf("\n Error!! asked to delete a NULL pointer, hence exiting \n");
-    exit(1);
-  }
+  if (node == NULL)
+      error("Asked to delete a NULL pointer.");
   temp = node->parent;
   temp->child = node->child;
   if (temp->child!=NULL) {
@@ -876,20 +872,34 @@ SEXP do_nsga2(SEXP s_function,
   int *generations;
   R_len_t n_generations;
 
-  if (!isFunction(s_function))     error("Argument 's_function' is not a function.");
-  if (!isFunction(s_constraint))   error("Argument 's_constraint' is not a function.");
-  if (!isInteger(s_input_dim))     error("Argument 's_input_dim' is not an integer.");
-  if (!isInteger(s_constr_dim))    error("Argument 's_constr_dim' is not an integer.");
-  if (!isReal(s_lower_bound))      error("Argument 's_lower_bound' is not a real vector.");
-  if (!isReal(s_upper_bound))      error("Argument 's_upper_bound' is not a real vector.");
-  if (!isInteger(s_popsize))       error("Argument 's_popsize' is not an integer.");
-  if (!isInteger(s_generations))   error("Argument 's_generations' is not an integer.");
-  if (!isInteger(s_obj_dim))       error("Argument 's_obj_dim' is not an integer.");
-  if (!isReal(s_crossing_prob))    error("Argument 's_crossing_prob' is not a real.");
-  if (!isInteger(s_crossing_dist)) error("Argument 's_crossing_dist' is not an integer.");
-  if (!isReal(s_mutation_prob))    error("Argument 's_mutation_prob' is not a real.");
-  if (!isInteger(s_mutation_dist)) error("Argument 's_mutation_dist' is not an integer.");
+  if (!isFunction(s_function))
+    error("Argument 's_function' is not a function.");
+  if (!isFunction(s_constraint))
+    error("Argument 's_constraint' is not a function.");
+  if (!isInteger(s_input_dim))
+    error("Argument 's_input_dim' is not an integer.");
+  if (!isInteger(s_constr_dim))    
+    error("Argument 's_constr_dim' is not an integer.");
+  if (!isReal(s_lower_bound))      
+    error("Argument 's_lower_bound' is not a real vector.");
+  if (!isReal(s_upper_bound))      
+    error("Argument 's_upper_bound' is not a real vector.");
+  if (!isInteger(s_popsize))       
+    error("Argument 's_popsize' is not an integer.");
+  if (!isInteger(s_generations))   
+    error("Argument 's_generations' is not an integer.");
+  if (!isInteger(s_obj_dim))       
+    error("Argument 's_obj_dim' is not an integer.");
+  if (!isReal(s_crossing_prob))    
+    error("Argument 's_crossing_prob' is not a real.");
+  if (!isInteger(s_crossing_dist)) 
+    error("Argument 's_crossing_dist' is not an integer.");
+  if (!isReal(s_mutation_prob))    
+    error("Argument 's_mutation_prob' is not a real.");
+  if (!isInteger(s_mutation_dist)) 
+    error("Argument 's_mutation_dist' is not an integer.");
 
+  PROTECT(ctx.environment = s_env);
   PROTECT(ctx.function_call	= lang2(s_function, R_NilValue));
   PROTECT(ctx.constraint_call	= lang2(s_constraint, R_NilValue));
   ctx.objective_dim		= INTEGER(s_obj_dim)[0];
@@ -966,6 +976,6 @@ SEXP do_nsga2(SEXP s_function,
     /* Save in result list: */
     SET_VECTOR_ELT(s_res, gen, s_pres);
   }
-  UNPROTECT(3); /* s_function_call, s_constraint_call, s_res */
+  UNPROTECT(4); /* ctx.environment, s_function_call, s_constraint_call, s_res */
   return s_res;
 }

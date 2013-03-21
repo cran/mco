@@ -63,6 +63,7 @@ dominatedHypervolume(x, ref)
 }
 \examples{
 ## Estimate true front:
+\dontrun{
 tf <- nsga2(fonseca2, 2, 2,
             lower.bounds=c(-4, -4), upper.bounds=c(4, 4),
             popsize=1000, generations=100)
@@ -74,4 +75,5 @@ sapply(1:n, function(i) dominatedHypervolume(res[[i]], c(1, 1)))
 sapply(1:n, function(i) generationalDistance(res[[i]], tf))
 sapply(1:n, function(i) generalizedSpread(res[[i]], tf))
 sapply(1:n, function(i) epsilonIndicator(res[[i]], tf))
+}
 }

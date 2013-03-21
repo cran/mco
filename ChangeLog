@@ -1,50 +1,32 @@
-commit d152ebdb3be97f09931f40cae35cfa3092c5e57d
-Author: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
-Date:   2010-05-18 14:14:09 +0200
+commit 5307aa0ce5003fbe11c7922d94c3a8b10ff6a4f2
+Author: Olaf Mersmann <olafm@p-value.net>
+Date:   2013-03-21 18:02:09 +0100
 
-    Fix Rd documentation.
+    Fix use of uninitialized environment.
 
-commit d7dc665c2e0b5552e00fe532cbbc640db1cd3116
-Author: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
-Date:   2010-05-17 22:13:13 +0200
+commit dc65f633c4ffc2423000a93df58a4dc202e68ace
+Author: Olaf Mersmann <olafm@p-value.net>
+Date:   2013-03-19 17:17:55 +0100
 
-    Bump version number.
+    More examples marked as dontrun.
 
-commit 3150422a25acca97c9cc2dac94dd51c0f9779e2f
-Author: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
-Date:   2010-05-17 22:12:34 +0200
-
-    Update hypervolume documentation.
-
-commit 21660255e5201ad96db6a7f1115280e2c2056eb2
-Author: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
-Date:   2010-05-17 22:12:20 +0200
-
-    Remove object files  from git repository.
-
-commit 019186654af9682ab0db8809c71a385a9ecd32c8
-Author: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
-Date:   2010-05-12 08:34:57 +0200
+commit 21b026dff3d3258f231be612e4c0cb66714fd5b1
+Author: Olaf Mersmann <olafm@p-value.net>
+Date:   2013-03-19 14:53:54 +0100
 
     Bump version number.
 
-commit cb8d2d9f045f534fe07efa0e476cb23ede46e868
-Author: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
-Date:   2010-05-12 08:33:14 +0200
+commit 556ee3919b76a0f03114a19ac6e23ef558396b9d
+Author: Olaf Mersmann <olafm@p-value.net>
+Date:   2013-03-19 14:53:46 +0100
 
-    Fix compiler warnings.
+    Do not run examples.
 
-commit e0043f29459c9402c14d16b597cc2ff76dd04ff7
-Author: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
-Date:   2010-05-12 08:32:58 +0200
+commit dfa62b33c831678fbf6677ba229f43cd88463193
+Author: Olaf Mersmann <olafm@p-value.net>
+Date:   2012-11-16 10:48:05 +0100
 
-    Improve nsga2() documentation.
-
-commit aad776ff71605f111b31502bc1e8cecba26c508e
-Author: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
-Date:   2010-05-12 08:32:28 +0200
-
-    Update Fonseca et.al. hypervolume code to version 1.3rc1.
+    Fix various warnings.
 
 commit e7b6dfc3c751ad0e09d13debecb4ca4ce93a1710
 Author: Olaf Mersmann <olafm@statistik.tu-dortmund.de>
