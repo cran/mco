@@ -13,11 +13,23 @@ nsga2 <- function(fn, idim, odim, ...,
                   upper.bounds=rep(Inf, idim),
                   popsize=100, generations=100,
                   cprob=0.7, cdist=5,
-                  mprob=0.2, mdist=10) {
-  ff <- function(x)
-    fn(x, ...)
-  cf <- function(x)
-    constraints(x, ...)
+                  mprob=0.2, mdist=10,
+                  vectorized=FALSE) {
+  ff <- function(x) {
+    if (vectorized) {
+      fn(x, ...)
+    } else {
+      apply(x, 1, fn, ...)
+    }
+  }
+  
+  cf <- function(x) {
+    if (vectorized) {
+      constraints(x, ...)
+    } else {
+      apply(x, 1, constraints, ...)
+    }
+  }
 
   ## Make sure popsize is a multiple of 4
   if (popsize %% 4 != 0)
@@ -36,7 +48,7 @@ nsga2 <- function(fn, idim, odim, ...,
   ## Set cdim = 0 if no cfn was given:
   if (is.null(constraints)) cdim <- 0
   
-  res <- .Call("do_nsga2",
+  res <- .Call(do_nsga2,
                ff, cf, sys.frame(),
                as.integer(odim),
                as.integer(cdim),
@@ -71,8 +83,8 @@ plot.nsga2 <- function(x, ...) {
     ov <- ov[order(ov[,1]),]
     lines (ov, col="red", type="s")
   } else if (d == 3) {
-    if (require(scatterplot3d)) {
-      scatterplot3d(v, color=ifelse(o, "red", "blue"))
+    if (require("scatterplot3d")) {
+      scatterplot3d::scatterplot3d(v, color=ifelse(o, "red", "blue"))
     } else {
       pairs(v, col=col, pch=pch, ...)
     }

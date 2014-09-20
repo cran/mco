@@ -10,7 +10,8 @@
         lower.bounds = rep(-Inf, idim), upper.bounds = rep(Inf, idim),
         popsize = 100, generations = 100,
         cprob = 0.7, cdist = 5,
-        mprob = 0.2, mdist = 10)
+        mprob = 0.2, mdist = 10,
+        vectorized=FALSE)
 }
 \arguments{
   \item{fn}{Function to be minimized}
@@ -28,12 +29,19 @@
   \item{cdist}{Crossover distribution index}
   \item{mprob}{Mutation probability}
   \item{mdist}{Mutation distribution index}
+  \item{vectorized}{If \code{TRUE}, the objective and constraint
+    functions must be vectorized, i.e. accept a matrix instead of a
+    vector and return a matrix instead of a vector. The matrix is
+    structured such that one individual parameter combination is
+    contained in each row (the matrix has shape \code{popsize * idim})
+    and each objective is stored in a column of the returned matrix (the
+    returned matrix must have shape \code{popsize * odim})}
 }
 \value{
-  If generation is an integer, a list describing the final population with components \code{par},
-  \code{value} and \code{pareto.optimal}. If generations is a vector, a
-  list is returned. The i-th element of the list contains the population
-  after generations[i] generations.
+  If generation is an integer, a list describing the final population
+  with components \code{par}, \code{value} and \code{pareto.optimal}. If
+  generations is a vector, a list is returned. The i-th element of the
+  list contains the population after generations[i] generations.  
 }
 \references{
   Deb, K., Pratap, A., and Agarwal, S..

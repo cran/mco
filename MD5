@@ -1,14 +1,13 @@
-16a62a14478919c001142330130168d0 *ChangeLog
-bc6dce627648073649f011a046bfd920 *DESCRIPTION
-28a54964af707c18972c8e2db779a670 *NAMESPACE
+baa28b8eb3c6c59aa435ec12c6e79c7d *DESCRIPTION
+fe0054e2eb20fefa322b31869318cbbb *NAMESPACE
 749d8916eef352d362e259020131055c *R/functions.R
 e2e7938c17ecb8dc1bf3c2a84f1fad8a *R/mco.R
-1abf8ee9781a4df5fc196df95459f494 *R/nsga2.R
-0d493cb72bf254972b577f70160150f0 *R/qs.R
+e0dc5de3965efcdad2612a078d9538be *R/nsga2.R
+04a6e76e0f662023e1b742bf3f99be6e *R/qs.R
 fd959f3c1a1f37b2f4247a9d4c7b6e72 *man/functions.Rd
 992b95b310828698eb4dca6eb20e2581 *man/generationalDistance.Rd
 59de794ab57aba3dc7d8c6c39af0a290 *man/normalizeFront.Rd
-338bf2b899ca436700e333d48d681fc7 *man/nsga2.Rd
+47e9012a26abb788141482be869e8e77 *man/nsga2.Rd
 db747ef852fd3299920ce74bba333d9d *man/paretoFront.Rd
 82d3c0f5b8dc3622876bdb8bc48a46c8 *src/Makevars
 3dbd45bc288bf345b4869decfc17a93c *src/avl.c
@@ -17,4 +16,4 @@ d735026ce620a29d49032590d03e60bc *src/eps_ind.c
 155348172eb86e1d010aee7f2334ef1d *src/hv.c
 a16a93a6a9c3cad3b414ee98c547d813 *src/hv.h
 3cba4651ba922aefc7e365516d7f5fbf *src/hv_interface.c
-a8af42be337a73d25dd1b7997e4e7a9e *src/nsga2.c
+2fd9be77b21009737dfcb545a3615f95 *src/nsga2.c
