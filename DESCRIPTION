@@ -1,20 +1,21 @@
 Package: mco
-Version: 1.0.13
+Version: 1.0-14
 Title: Multiple criteria optimization algorithms and related functions
 Description: Functions for multiple criteria optimization using genetic
-    algorithms and related test problems
+        algorithms and related test problems
 Authors@R: c( person("Olaf", "Mersmann", role=c("aut", "cre"),
-    email="olafm@p-value.net"), person("Heike", "Trautmann", role=c("ctb"),
-    email="trautmann@wi.uni-muenster.de"), person("Detlef", "Steuer",
-    role=c("ctb"), email="detlef.steuer@hsu-hamburg.de"), person("Bernd",
-    "Bischl", role=c("ctb"), email="bernd_bischl@gmx.net"), person("Kalyanmoy",
-    "Deb", role=c("cph")) )
+        email="olafm@p-value.net"), person("Heike", "Trautmann",
+        role=c("ctb"), email="trautmann@wi.uni-muenster.de"),
+        person("Detlef", "Steuer", role=c("ctb"),
+        email="detlef.steuer@hsu-hamburg.de"), person("Bernd",
+        "Bischl", role=c("ctb"), email="bernd_bischl@gmx.net"),
+        person("Kalyanmoy", "Deb", role=c("cph")) )
 Depends: R (>= 3.0.0)
 Suggests: scatterplot3d
 License: GPL-2
 URL: http://git.p-value.net/p/mco.git
 LazyData: yes
-Packaged: 2014-09-20 14:21:51 UTC; olafm
+Packaged: 2014-09-21 09:49:29 UTC; olafm
 Author: Olaf Mersmann [aut, cre],
   Heike Trautmann [ctb],
   Detlef Steuer [ctb],
@@ -23,4 +24,4 @@ Author: Olaf Mersmann [aut, cre],
 Maintainer: Olaf Mersmann <olafm@p-value.net>
 NeedsCompilation: yes
 Repository: CRAN
-Date/Publication: 2014-09-20 16:49:59
+Date/Publication: 2014-09-21 13:32:20
