@@ -90,7 +90,7 @@ static void population_initialize(nsga2_ctx *ctx, population *pop) {
     for (j=0; j<ctx->input_dim; ++j) {
       /* Generate random value between lower and upper bound */
       double delta = ctx->upper_input_bound[j] - ctx->lower_input_bound[j];
-      pop->ind[i].input[j] = ctx->lower_input_bound[j]  + delta*unif_rand();
+      pop->ind[i].input[j] = ctx->lower_input_bound[j] + delta*unif_rand();
     }
   }
   PutRNGstate();
@@ -292,11 +292,28 @@ static void evaluate_pop (nsga2_ctx *ctx, population *pop) {
 
   /* Now evaluate and copy the result back into the pop sturcture: */
   PROTECT(s_fval = eval(fcall, ctx->environment));
-  s_fval = coerceVector(s_fval, REALSXP);
+  /* Make sure user is abiding to API w.r.t. shape of returned matrix */
+  if (isMatrix(s_fval)) {
+    if (nrows(s_fval) != ctx->objective_dim || ncols(s_fval) != pop->size)
+      error("Evaluation of vectorized objective function returned a malformed"
+          "matrix. Expected %i rows and %i columns but got %i rows and "
+          "%i columns.",
+          ctx->objective_dim, pop->size, nrows(s_fval), ncols(s_fval));
+  } else if (isVector(s_fval) && ctx->objective_dim == 1) {
+    if (length(s_fval) != pop->size) {
+      error("Evaluation of vectorized objective funtion returned a vector."
+            "You should return a %i by %i matrix instead!",
+            ctx->objective_dim, pop->size);
+    }
+  } else {
+    error("Evaluation of vectorized objective function returned something"
+          "other than a matrix.");
+  }
 
+  s_fval = coerceVector(s_fval, REALSXP);
   for (i=0; i < pop->size; ++i) {
     for (j = 0; j < ctx->objective_dim; ++j) {
-      pop->ind[i].objective[j] = REAL(s_fval)[i + j * pop->size];
+      pop->ind[i].objective[j] = REAL(s_fval)[j + i * ctx->objective_dim];
     }
   }
   UNPROTECT(1); /* s_fval */
@@ -311,11 +328,29 @@ static void evaluate_pop (nsga2_ctx *ctx, population *pop) {
    */
   if (ctx->constraint_dim > 0) {
     PROTECT(s_cval = eval(ccall, ctx->environment));
-    s_cval = coerceVector(s_cval, REALSXP);
+    /* Make sure user is abiding to API w.r.t. shape of returned matrix */
+    if (isMatrix(s_cval)) {
+      if (nrows(s_cval) != ctx->constraint_dim || ncols(s_cval) != pop->size)
+        error("Evaluation of vectorized constraint function returned a "
+            "malformed matrix. Expected %i rows and %i columns but got "
+            "%i rows and %i columns.",
+            ctx->constraint_dim, pop->size, nrows(s_cval), ncols(s_cval));
+    } else if (isVector(s_cval) && ctx->constraint_dim == 1) {
+      if (length(s_cval) != pop->size) {
+        error("Evaluation of vectorized constraint function returned "
+              "a vector. You should return a %i by %i matrix instead!",
+              ctx->constraint_dim, pop->size);
+      }
+    } else {
+      error("Evaluation of vectorized constraint function returned something"
+            "other than a matrix.");
+    }
 
+    s_cval = coerceVector(s_cval, REALSXP);
     for (i=0; i < pop->size; ++i) {
+      pop->ind[i].constraint_violation = 0.0;
       for (j = 0; j < ctx->constraint_dim; ++j) {
-        pop->ind[i].constraint[j] = REAL(s_cval)[i + j * pop->size];
+        pop->ind[i].constraint[j] = REAL(s_cval)[j + i * ctx->objective_dim];
         if (pop->ind[i].constraint[j] < 0.0)
           pop->ind[i].constraint_violation += pop->ind[i].constraint[j];
       }
@@ -368,6 +403,7 @@ static void assign_crowding_distance_list (nsga2_ctx *ctx, const population *pop
     pop->ind[lst->index].crowding_distance = INF;
     return;
   } else if (front_size==2) {
+    assert(lst->child != NULL);
     pop->ind[lst->index].crowding_distance = INF;
     pop->ind[lst->child->index].crowding_distance = INF;
     return;
@@ -433,7 +469,6 @@ static void assign_rank_and_crowding_distance (nsga2_ctx *ctx, population *new_p
   list *temp1, *temp2;
   orig = (list *) Calloc(1, list);
   cur = (list *) Calloc(1, list);
-  front_size = 0;
   orig->index = -1;
   orig->parent = NULL;
   orig->child = NULL;
@@ -441,7 +476,8 @@ static void assign_rank_and_crowding_distance (nsga2_ctx *ctx, population *new_p
   cur->parent = NULL;
   cur->child = NULL;
   temp1 = orig;
-  for (i=0; i< new_pop->size; i++) {
+  assert(new_pop->size > 0);
+  for (i=0; i < new_pop->size; i++) {
     insert (temp1,i);
     temp1 = temp1->child;
   }
@@ -454,7 +490,6 @@ static void assign_rank_and_crowding_distance (nsga2_ctx *ctx, population *new_p
     temp1 = orig->child;
     insert (cur, temp1->index);
     front_size = 1;
-    temp2 = cur->child;
     temp1 = del (temp1);
     temp1 = temp1->child;
     do {
@@ -950,7 +985,7 @@ SEXP do_nsga2(SEXP s_function,
   evaluate_pop (&ctx, parents);
   assign_rank_and_crowding_distance (&ctx, parents);
   for (gen=0; gen < n_generations; ++gen) {
-    for (i=2; (i-2) <= generations[gen]; ++i) {
+    for (i=0; i < generations[gen]; ++i) {
       selection (&ctx, parents, children);
       mutation_pop (&ctx, children);
       evaluate_pop(&ctx, children);
@@ -973,10 +1008,12 @@ SEXP do_nsga2(SEXP s_function,
 
     for (i=0; i < popsize; ++i) {
       pareto_optimal[i] = on_pareto_front(&(parents->ind[i]));
-      for (j=0; j < ctx.input_dim; ++j)
+      for (j=0; j < ctx.input_dim; ++j) {
         input[popsize * j + i] = parents->ind[i].input[j];
-      for (j=0; j < ctx.objective_dim; ++j)
+      }
+      for (j=0; j < ctx.objective_dim; ++j) {
         objective[popsize * j + i] = parents->ind[i].objective[j];
+      }
     }
     /* Buid result list */
     SEXP s_pres;
@@ -984,10 +1021,11 @@ SEXP do_nsga2(SEXP s_function,
     SET_VECTOR_ELT(s_pres, 0, s_input);
     SET_VECTOR_ELT(s_pres, 1, s_objective);
     SET_VECTOR_ELT(s_pres, 2, s_pareto_optimal);
-    UNPROTECT(4); /* s_input, s_objective, s_pareto_optimal, s_pres */
+    UNPROTECT(3); /* s_input, s_objective, s_pareto_optimal */
 
     /* Save in result list: */
     SET_VECTOR_ELT(s_res, gen, s_pres);
+    UNPROTECT(1); /* s_pres */
   }
   UNPROTECT(4); /* ctx.environment, s_function_call, s_constraint_call, s_res */
   return s_res;

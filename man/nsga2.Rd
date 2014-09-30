@@ -2,7 +2,21 @@
 \alias{nsga2}
 \title{NSGA II MOEA}
 \description{
-  Multicriterion optimization algorithm
+  The NSGA-II algorithm minimizes a multidimensional function to approximate its Pareto front and Pareto set.
+  It does this by successive sampling of the search space, each such sample is called a \emph{population}. 
+  The number of samples taken is governed by the \code{generations} parameter, the size of the sample by the \code{popsize} parameter.
+  Each population is obtained by creating so called offspring search points from the best individuals in the previous population. 
+  The best individuals are calculated by non-dominated sorting breaking ties using the crowding distance.
+  The total number of function evaluations used is 
+    \deqn{n_eval = popsize * (generations + 1)}
+  when \code{generations} is a single number and
+    \deqn{n_eval = popsize * (max(generations) + 1)}
+  when \code{generations} is a vector of numbers. 
+  Note the additional generation of evaluations in the above equation. 
+  These stem from the initial population which must be evaluated before the algorithm can start evolving new individuals.
+
+  While the algorithm supports unbounded minimization, it will throw a warning and best results are obtained when a sensible upper and lower bound are given. 
+  No attempt is made to find such a sensible region of interest, instead if any element of the upper or lower bound is infinite, it is replace with a very large number (currently +/-\Sexpr{.Machine$double.xmax/4}).
 }
 \usage{
   nsga2(fn, idim, odim, ...,
@@ -34,14 +48,20 @@
     vector and return a matrix instead of a vector. The matrix is
     structured such that one individual parameter combination is
     contained in each row (the matrix has shape \code{popsize * idim})
-    and each objective is stored in a column of the returned matrix (the
-    returned matrix must have shape \code{popsize * odim})}
+    and each objective is stored in a row of the returned matrix (the
+    returned matrix must have shape \code{odim * popsize}).
+    
+    A vectorized of a function \code{fn} should behave like
+    \code{apply(x, 1, f} for a population stored in the matrix \code{x}. }
 }
 \value{
   If generation is an integer, a list describing the final population
   with components \code{par}, \code{value} and \code{pareto.optimal}. If
   generations is a vector, a list is returned. The i-th element of the
-  list contains the population after generations[i] generations.  
+  list contains the population after generations[i] generations, this is
+  not necessarily the set of new individuals that were evaluated in this 
+  generation. Some of the new individuals might have been eliminated in
+  the selection phase.  
 }
 \references{
   Deb, K., Pratap, A., and Agarwal, S..
