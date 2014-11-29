@@ -350,7 +350,7 @@ static void evaluate_pop (nsga2_ctx *ctx, population *pop) {
     for (i=0; i < pop->size; ++i) {
       pop->ind[i].constraint_violation = 0.0;
       for (j = 0; j < ctx->constraint_dim; ++j) {
-        pop->ind[i].constraint[j] = REAL(s_cval)[j + i * ctx->objective_dim];
+        pop->ind[i].constraint[j] = REAL(s_cval)[j + i * ctx->constraint_dim];
         if (pop->ind[i].constraint[j] < 0.0)
           pop->ind[i].constraint_violation += pop->ind[i].constraint[j];
       }

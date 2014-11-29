@@ -1,10 +1,10 @@
-d9bc8557cff0154f45b5e738bfefd203 *DESCRIPTION
+b5fe7a53fc6cd30834b12e406374a749 *DESCRIPTION
 fe0054e2eb20fefa322b31869318cbbb *NAMESPACE
 749d8916eef352d362e259020131055c *R/functions.R
 e2e7938c17ecb8dc1bf3c2a84f1fad8a *R/mco.R
 dd5291aca105c1d2521957141dbcfbca *R/nsga2.R
 04a6e76e0f662023e1b742bf3f99be6e *R/qs.R
-58ef3199c237d518fa0545e99ec5541d *build/mco.pdf
+99099616b2b3bacfe457dc6f6eef5a6d *build/mco.pdf
 fd959f3c1a1f37b2f4247a9d4c7b6e72 *man/functions.Rd
 992b95b310828698eb4dca6eb20e2581 *man/generationalDistance.Rd
 33660c1451fa2b3763f4726829a21a5e *man/normalizeFront.Rd
@@ -17,7 +17,7 @@ d735026ce620a29d49032590d03e60bc *src/eps_ind.c
 155348172eb86e1d010aee7f2334ef1d *src/hv.c
 a16a93a6a9c3cad3b414ee98c547d813 *src/hv.h
 3cba4651ba922aefc7e365516d7f5fbf *src/hv_interface.c
-339850b6999ddbe1b0404da18fad4621 *src/nsga2.c
+8e965c27853559e86e3c6437a5852002 *src/nsga2.c
 c6c370f62c4d86eb830782ff0fdd057a *tests/testthat.R
 4e47bd956ba348104c621fd0d8056d22 *tests/testthat/test-reg-n_evals.R
 c33a1986c116418e01b240b10268f553 *tests/testthat/test-reg-vectorized.R
