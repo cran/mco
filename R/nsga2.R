@@ -92,7 +92,7 @@ plot.nsga2 <- function(x, ...) {
     ov <- ov[order(ov[,1]),]
     lines (ov, col="red", type="s")
   } else if (d == 3) {
-    if (require("scatterplot3d")) {
+    if (requireNamespace("scatterplot3d", quietly=TRUE)) {
       scatterplot3d::scatterplot3d(v, color=ifelse(o, "red", "blue"))
     } else {
       pairs(v, col=col, pch=pch, ...)
@@ -105,8 +105,7 @@ plot.nsga2 <- function(x, ...) {
 plot.nsga2.collection <- function(x, ...) {
   oask <- devAskNewPage(TRUE)
   on.exit(devAskNewPage(oask))
-  sapply(x, plot)
-  return;
+  invisible(sapply(x, plot))
 }
 
 paretoSet.nsga2 <- function(x, ...)
