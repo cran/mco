@@ -1,14 +1,13 @@
 Package: mco
-Version: 1.15.6
+Version: 1.16
 Title: Multiple Criteria Optimization Algorithms and Related Functions
 Description: A collection of function to solve multiple criteria optimization problems 
   using genetic algorithms (NSGA-II). Also included is a collection of test functions.
-Authors@R: c(person("Olaf", "Mersmann", role=c("aut", "cre"),
-        email="olafm@p-value.net"), person("Heike", "Trautmann",
-        role=c("ctb"), email="trautmann@wi.uni-muenster.de"),
-        person("Detlef", "Steuer", role=c("ctb"),
-        email="detlef.steuer@hsu-hamburg.de"), person("Bernd",
-        "Bischl", role=c("ctb"), email="bernd_bischl@gmx.net"),
+Authors@R: c(
+        person("Olaf", "Mersmann", role=c("aut", "cre"), email="olafm@p-value.net"), 
+	person("Heike", "Trautmann", role=c("ctb"), email="trautmann@wi.uni-muenster.de"),
+        person("Detlef", "Steuer", role=c("ctb"), email="detlef.steuer@hsu-hamburg.de"),
+	person("Bernd", "Bischl", role=c("ctb"), email="bernd_bischl@gmx.net"),
         person("Kalyanmoy", "Deb", role=c("cph")) )
 Language: en-US
 Depends: R (>= 3.0.0)
@@ -16,9 +15,8 @@ Suggests: scatterplot3d, testthat
 License: GPL-2
 URL: https://github.com/olafmersmann/mco
 Encoding: UTF-8
-LazyData: yes
 NeedsCompilation: yes
-Packaged: 2020-10-08 14:54:32 UTC; olafm
+Packaged: 2024-01-11 07:38:29 UTC; olafm
 Author: Olaf Mersmann [aut, cre],
   Heike Trautmann [ctb],
   Detlef Steuer [ctb],
@@ -26,4 +24,4 @@ Author: Olaf Mersmann [aut, cre],
   Kalyanmoy Deb [cph]
 Maintainer: Olaf Mersmann <olafm@p-value.net>
 Repository: CRAN
-Date/Publication: 2020-10-09 10:50:05 UTC
+Date/Publication: 2024-01-11 08:03:03 UTC

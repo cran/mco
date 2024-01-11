@@ -1,12 +1,13 @@
-03871ed12767a643ad997c5460ad5543 *DESCRIPTION
+7d37f331625a5fb0e7958124f35b24f6 *DESCRIPTION
 be77f8df631e24f65beef7cba802cb11 *NAMESPACE
 749d8916eef352d362e259020131055c *R/functions.R
 e2e7938c17ecb8dc1bf3c2a84f1fad8a *R/mco.R
 e947219427719fabcf75423b4c640e21 *R/nsga2.R
 04a6e76e0f662023e1b742bf3f99be6e *R/qs.R
-9ac9fa1d08e88e04ae10af8db4fabcf5 *build/mco.pdf
+115d3a1cf913f92de3d717d61bc8254c *build/mco.pdf
+b9da550b39e4971b06157e35db7304ae *build/stage23.rdb
 fd959f3c1a1f37b2f4247a9d4c7b6e72 *man/functions.Rd
-34f9818887c25d185e4bbbd6ab7987db *man/generationalDistance.Rd
+966571d0cf99a455de04dd469fea6048 *man/generationalDistance.Rd
 33660c1451fa2b3763f4726829a21a5e *man/normalizeFront.Rd
 9d9d59375635ebd9ffc609d037387e77 *man/nsga2.Rd
 47b2c21f379c4ba4c3b5b8ac6cfa03ec *man/paretoFront.Rd
@@ -19,7 +20,7 @@ b26af40b7c8172517ad326db18961016 *src/hv.c
 a16a93a6a9c3cad3b414ee98c547d813 *src/hv.h
 3cba4651ba922aefc7e365516d7f5fbf *src/hv_interface.c
 3658c4efee79c99263b91d00968425f5 *src/mco.c
-ab83526cea5f4e63267083f94629ea3b *src/nsga2.c
+806befd762c9a554b231c76d9d0af447 *src/nsga2.c
 c6c370f62c4d86eb830782ff0fdd057a *tests/testthat.R
 1716e5e391b1c7478b76ac12ad846115 *tests/testthat/test-constraints.R
 4e47bd956ba348104c621fd0d8056d22 *tests/testthat/test-reg-n_evals.R
